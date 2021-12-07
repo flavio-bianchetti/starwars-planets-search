@@ -1,7 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-function Table({ dataTestId, data }) {
+function Table({ dataTestId, data, filter }) {
+  let rowFilter = data;
+  if (filter.filterByName.name !== '') {
+    rowFilter = data.filter((planet) => planet.name.includes(filter.filterByName.name));
+  }
   return (
     <table>
       <tr>
@@ -20,7 +24,7 @@ function Table({ dataTestId, data }) {
         <th>URL</th>
       </tr>
       {
-        data.map((line, indexLine) => (
+        rowFilter.map((line, indexLine) => (
           <tr
             key={ indexLine }
             dataTestId={ dataTestId }
@@ -48,6 +52,7 @@ function Table({ dataTestId, data }) {
 Table.propTypes = {
   dataTestId: PropTypes.string.isRequired,
   data: PropTypes.arrayOf(PropTypes.string).isRequired,
+  filter: PropTypes.objectOf(PropTypes.any).isRequired,
 };
 
 export default Table;

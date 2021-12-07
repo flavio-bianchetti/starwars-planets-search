@@ -1,18 +1,20 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Input from '../elements/Input';
 import Select from '../elements/Select';
 import Button from '../elements/Button';
 import RadioButton from '../elements/RadioButton';
 import DataSelect from '../data/DataSelect';
+import StarWarsContext from '../context/StarWarsContext';
 
-function searchInput() {
+function searchInput(filter, handleChangeFilterByName) {
+  const { filterByName } = filter;
   return (
     <Input
-      dataTestId="input"
+      dataTestId="name-filter"
       type="text"
       name="inputSearches"
-      value=""
-      onChange={ () => true }
+      value={ filterByName.name }
+      onChange={ handleChangeFilterByName }
     />
   );
 }
@@ -80,10 +82,11 @@ function orderForm() {
 }
 
 function Header() {
+  const { filter, handleChangeFilterByName } = useContext(StarWarsContext);
   return (
     <section>
       <h1>Projeto Star Wars - Trybe</h1>
-      { searchInput() }
+      { searchInput(filter, handleChangeFilterByName) }
       { filterForm() }
       { orderForm() }
     </section>

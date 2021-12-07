@@ -19,9 +19,22 @@ function StarWarsContextProvider({ children }) {
     edited: '',
     url: '',
   }]);
+  const [filter, setFilter] = useState(
+    {
+      filterByName: {
+        name: '',
+      },
+    },
+  );
+  const [shouldRefreshStarWarsAPI, setShouldRefreshStarWarsAPI] = useState(true);
 
   function handleFetchSuccess(json) {
-    setdata(json.results);
+    const { results } = json;
+    if (filter.filterByName.name !== '') {
+      setdata(results.filter((result) => result.name.includes(filter.filterByName.name)));
+    } else {
+      setdata(results);
+    }
   }
 
   function handleFetchError(error) {
@@ -29,16 +42,33 @@ function StarWarsContextProvider({ children }) {
   }
 
   function fetchStarWarsAPI() {
+    if (!shouldRefreshStarWarsAPI) return;
+
+    setShouldRefreshStarWarsAPI(false);
+
     getStarWarsAPI()
       .then(handleFetchSuccess, handleFetchError);
   }
 
+  function handleChangeFilterByName(event) {
+    event.preventDefault();
+    // setShouldRefreshStarWarsAPI(true);
+    setFilter({
+      ...filter,
+      filterByName: {
+        name: event.target.value,
+      },
+    });
+  }
+
   useEffect(() => {
     fetchStarWarsAPI();
-  }, []);
+  }, [data, filter]);
 
   const context = {
     data,
+    filter,
+    handleChangeFilterByName,
   };
 
   return (
