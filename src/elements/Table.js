@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-function Table({ dataTestId, arrayLines }) {
+function Table({ dataTestId, data }) {
   return (
     <table>
       <tr>
@@ -20,19 +20,19 @@ function Table({ dataTestId, arrayLines }) {
         <th>URL</th>
       </tr>
       {
-        arrayLines.map((line, index) => (
+        data.map((line, indexLine) => (
           <tr
-            key={ index }
+            key={ indexLine }
             dataTestId={ dataTestId }
           >
             <td>{ line.name }</td>
-            <td>{ line.rotation }</td>
-            <td>{ line.orbital }</td>
+            <td>{ line.rotation_period }</td>
+            <td>{ line.orbital_period }</td>
             <td>{ line.diameter }</td>
             <td>{ line.climate }</td>
             <td>{ line.gravity }</td>
             <td>{ line.terrain }</td>
-            <td>{ line.water }</td>
+            <td>{ line.surface_water }</td>
             <td>{ line.population }</td>
             <td>{ line.films }</td>
             <td>{ line.created }</td>
@@ -47,7 +47,7 @@ function Table({ dataTestId, arrayLines }) {
 
 Table.propTypes = {
   dataTestId: PropTypes.string.isRequired,
-  arrayLines: PropTypes.arrayOf(PropTypes.string).isRequired,
+  data: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
 export default Table;
