@@ -19,9 +19,11 @@ function searchInput(filter, handleChangeFilterByName) {
   );
 }
 
-function filterForm() {
+function filterForm(tempFilterByNumericValues,
+  handleClickFilterByNumericValues,
+  handleChangeFilterByNumericValues) {
   return (
-    <form>
+    <form onSubmit={ handleClickFilterByNumericValues }>
       {
         DataSelect.map((select, index) => (
           index < 2 && (
@@ -31,20 +33,21 @@ function filterForm() {
               name={ select.name }
               arrayOptions={ select.arrayOptions }
               title={ select.title }
+              onChange={ handleChangeFilterByNumericValues }
             />
           )
         ))
       }
       <Input
-        dataTestId="input"
+        dataTestId="value-filter"
         type="number"
-        name="inputSearches"
-        value="0"
-        onChange={ () => true }
+        name="value"
+        value={ tempFilterByNumericValues.value || 0 }
+        onChange={ handleChangeFilterByNumericValues }
       />
       <Button
-        dataTestId="button"
-        name="filtrar"
+        dataTestId="button-filter"
+        name="buttonFilter"
         value="FILTRAR"
       />
     </form>
@@ -82,12 +85,20 @@ function orderForm() {
 }
 
 function Header() {
-  const { filter, handleChangeFilterByName } = useContext(StarWarsContext);
+  const {
+    filter,
+    tempFilterByNumericValues,
+    handleChangeFilterByNumericValues,
+    handleChangeFilterByName,
+    handleClickFilterByNumericValues,
+  } = useContext(StarWarsContext);
   return (
     <section>
       <h1>Projeto Star Wars - Trybe</h1>
       { searchInput(filter, handleChangeFilterByName) }
-      { filterForm() }
+      { filterForm(tempFilterByNumericValues,
+        handleClickFilterByNumericValues,
+        handleChangeFilterByNumericValues) }
       { orderForm() }
     </section>
   );

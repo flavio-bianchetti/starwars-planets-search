@@ -3,12 +3,13 @@ import PropTypes from 'prop-types';
 
 function Button({ dataTestId, name, value }) {
   return (
-    <input
-      dataTestId={ dataTestId }
+    <button
+      data-testid={ dataTestId }
       type="submit"
       name={ name }
-      value={ value }
-    />
+    >
+      { value }
+    </button>
   );
 }
 

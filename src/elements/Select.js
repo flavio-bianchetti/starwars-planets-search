@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-function Select({ dataTestId, name, arrayOptions, title }) {
+function Select({ dataTestId, name, arrayOptions, title, onChange }) {
   return (
     <div>
       <label
@@ -12,6 +12,7 @@ function Select({ dataTestId, name, arrayOptions, title }) {
           data-testid={ dataTestId }
           id={ name }
           name={ name }
+          onChange={ onChange }
         >
           {
             arrayOptions.map((option, index) => (
@@ -34,6 +35,7 @@ Select.propTypes = {
   name: PropTypes.string.isRequired,
   arrayOptions: PropTypes.arrayOf(PropTypes.string).isRequired,
   title: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
 };
 
 export default Select;

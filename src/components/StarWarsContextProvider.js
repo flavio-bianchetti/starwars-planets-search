@@ -24,6 +24,20 @@ function StarWarsContextProvider({ children }) {
       filterByName: {
         name: '',
       },
+      filterByNumericValues: [
+        {
+          column: '',
+          comparison: '',
+          value: '',
+        },
+      ],
+    },
+  );
+  const [tempFilterByNumericValues, setTempFilterByNumericValues] = useState(
+    {
+      column: 'population',
+      comparison: 'maior que',
+      value: '0',
     },
   );
   const [shouldRefreshStarWarsAPI, setShouldRefreshStarWarsAPI] = useState(true);
@@ -52,12 +66,34 @@ function StarWarsContextProvider({ children }) {
 
   function handleChangeFilterByName(event) {
     event.preventDefault();
-    // setShouldRefreshStarWarsAPI(true);
     setFilter({
       ...filter,
       filterByName: {
         name: event.target.value,
       },
+    });
+  }
+
+  function handleClickFilterByNumericValues(event) {
+    event.preventDefault();
+    setFilter({
+      ...filter,
+      filterByNumericValues: [
+        {
+          column: tempFilterByNumericValues.column,
+          comparison: tempFilterByNumericValues.comparison,
+          value: tempFilterByNumericValues.value,
+        },
+      ],
+    });
+  }
+
+  function handleChangeFilterByNumericValues(event) {
+    event.preventDefault();
+    const { name, value } = event.target;
+    setTempFilterByNumericValues({
+      ...tempFilterByNumericValues,
+      [name]: value,
     });
   }
 
@@ -68,7 +104,10 @@ function StarWarsContextProvider({ children }) {
   const context = {
     data,
     filter,
+    tempFilterByNumericValues,
+    handleChangeFilterByNumericValues,
     handleChangeFilterByName,
+    handleClickFilterByNumericValues,
   };
 
   return (

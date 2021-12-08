@@ -1,10 +1,36 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+function getArrayFilteredByName(data, name) {
+  return data.filter((planet) => planet.name.includes(name));
+}
+
+// dica de filtro fornecida por Bruno Bartolomeu, Isaac Batista e Lucas Pinheiro.
+function getArrayFilteredByNumericValuesFilter(data, { column, comparison, value }) {
+  return data.filter((planet) => {
+    const valuePlanet = Number(planet[column]);
+    if (comparison === 'maior que') {
+      return valuePlanet > Number(value);
+    }
+    if (comparison === 'menor que') {
+      return valuePlanet < Number(value);
+    }
+    return valuePlanet === Number(value);
+  });
+}
+
 function Table({ dataTestId, data, filter }) {
   let rowFilter = data;
-  if (filter.filterByName.name !== '') {
-    rowFilter = data.filter((planet) => planet.name.includes(filter.filterByName.name));
+  const { filterByName, filterByNumericValues } = filter;
+
+  if (filterByName.name.length > 0) {
+    rowFilter = getArrayFilteredByName(rowFilter, filterByName.name);
+  }
+
+  if (filterByNumericValues[0].value.length > 0) {
+    rowFilter = getArrayFilteredByNumericValuesFilter(
+      rowFilter, filterByNumericValues[0],
+    );
   }
   return (
     <table>
