@@ -14,16 +14,20 @@ function Select({ dataTestId, name, arrayOptions, title, onChange }) {
           name={ name }
           onChange={ onChange }
         >
-          {
-            arrayOptions.map((option, index) => (
-              <option
-                key={ index }
-                value={ option.value }
-              >
-                { option.description }
-              </option>
-            ))
-          }
+          { arrayOptions.length > 0
+            ? (
+              arrayOptions.map((option, index) => (
+                <option
+                  key={ index }
+                  value={ option.value }
+                >
+                  { option.description }
+                </option>
+              ))
+            )
+            : (
+              <option> </option>
+            )}
         </select>
       </label>
     </div>

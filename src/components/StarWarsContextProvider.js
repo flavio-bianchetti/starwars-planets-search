@@ -24,13 +24,7 @@ function StarWarsContextProvider({ children }) {
       filterByName: {
         name: '',
       },
-      filterByNumericValues: [
-        {
-          column: '',
-          comparison: '',
-          value: '',
-        },
-      ],
+      filterByNumericValues: [],
     },
   );
   const [tempFilterByNumericValues, setTempFilterByNumericValues] = useState(
@@ -41,6 +35,15 @@ function StarWarsContextProvider({ children }) {
     },
   );
   const [shouldRefreshStarWarsAPI, setShouldRefreshStarWarsAPI] = useState(true);
+  const [optionsSelectFilter, setOptionsSelectFilter] = useState(
+    [
+      { value: 'population', description: 'population' },
+      { value: 'orbital_period', description: 'orbital_period' },
+      { value: 'diameter', description: 'diameter' },
+      { value: 'rotation_period', description: 'rotation_period' },
+      { value: 'surface_water', description: 'surface_water' },
+    ],
+  );
 
   function handleFetchSuccess(json) {
     const { results } = json;
@@ -76,16 +79,28 @@ function StarWarsContextProvider({ children }) {
 
   function handleClickFilterByNumericValues(event) {
     event.preventDefault();
-    setFilter({
+    setFilter((previousFilter) => ({
       ...filter,
       filterByNumericValues: [
+        ...previousFilter.filterByNumericValues,
         {
           column: tempFilterByNumericValues.column,
           comparison: tempFilterByNumericValues.comparison,
           value: tempFilterByNumericValues.value,
         },
       ],
-    });
+    }));
+    const updateSelectFilter = optionsSelectFilter
+      .filter((option) => option.value !== tempFilterByNumericValues.column);
+    setOptionsSelectFilter(updateSelectFilter);
+    let column = '';
+    if (updateSelectFilter.length > 0) {
+      column = updateSelectFilter[0].value;
+    }
+    setTempFilterByNumericValues((previousFilter) => ({
+      ...previousFilter,
+      column,
+    }));
   }
 
   function handleChangeFilterByNumericValues(event) {
@@ -99,7 +114,7 @@ function StarWarsContextProvider({ children }) {
 
   useEffect(() => {
     fetchStarWarsAPI();
-  }, [data, filter]);
+  }, [data, fetchStarWarsAPI, filter]);
 
   const context = {
     data,
@@ -108,6 +123,7 @@ function StarWarsContextProvider({ children }) {
     handleChangeFilterByNumericValues,
     handleChangeFilterByName,
     handleClickFilterByNumericValues,
+    optionsSelectFilter,
   };
 
   return (

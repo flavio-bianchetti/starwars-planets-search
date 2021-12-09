@@ -21,7 +21,8 @@ function searchInput(filter, handleChangeFilterByName) {
 
 function filterForm(tempFilterByNumericValues,
   handleClickFilterByNumericValues,
-  handleChangeFilterByNumericValues) {
+  handleChangeFilterByNumericValues,
+  optionsSelectFilter) {
   return (
     <form onSubmit={ handleClickFilterByNumericValues }>
       {
@@ -31,7 +32,9 @@ function filterForm(tempFilterByNumericValues,
               key={ index }
               dataTestId={ select.dataTestId }
               name={ select.name }
-              arrayOptions={ select.arrayOptions }
+              arrayOptions={ index === 0
+                ? optionsSelectFilter
+                : select.arrayOptions }
               title={ select.title }
               onChange={ handleChangeFilterByNumericValues }
             />
@@ -91,6 +94,7 @@ function Header() {
     handleChangeFilterByNumericValues,
     handleChangeFilterByName,
     handleClickFilterByNumericValues,
+    optionsSelectFilter,
   } = useContext(StarWarsContext);
   return (
     <section>
@@ -98,7 +102,8 @@ function Header() {
       { searchInput(filter, handleChangeFilterByName) }
       { filterForm(tempFilterByNumericValues,
         handleClickFilterByNumericValues,
-        handleChangeFilterByNumericValues) }
+        handleChangeFilterByNumericValues,
+        optionsSelectFilter) }
       { orderForm() }
     </section>
   );

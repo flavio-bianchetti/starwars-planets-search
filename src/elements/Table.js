@@ -6,8 +6,9 @@ function getArrayFilteredByName(data, name) {
 }
 
 // dica de filtro fornecida por Bruno Bartolomeu, Isaac Batista e Lucas Pinheiro.
-function getArrayFilteredByNumericValuesFilter(data, { column, comparison, value }) {
-  return data.filter((planet) => {
+function getArrayFilteredByNumericValuesFilter(data, filterByNumericValues) {
+  return data.filter((planet) => filterByNumericValues.every((values) => {
+    const { column, comparison, value } = values;
     const valuePlanet = Number(planet[column]);
     if (comparison === 'maior que') {
       return valuePlanet > Number(value);
@@ -15,8 +16,12 @@ function getArrayFilteredByNumericValuesFilter(data, { column, comparison, value
     if (comparison === 'menor que') {
       return valuePlanet < Number(value);
     }
-    return valuePlanet === Number(value);
-  });
+    if (comparison === 'igual a') {
+      console.log(valuePlanet, value);
+      return valuePlanet === Number(value);
+    }
+    return false;
+  }));
 }
 
 function Table({ dataTestId, data, filter }) {
@@ -27,9 +32,9 @@ function Table({ dataTestId, data, filter }) {
     rowFilter = getArrayFilteredByName(rowFilter, filterByName.name);
   }
 
-  if (filterByNumericValues[0].value.length > 0) {
+  if (filterByNumericValues.length > 0) {
     rowFilter = getArrayFilteredByNumericValuesFilter(
-      rowFilter, filterByNumericValues[0],
+      rowFilter, filterByNumericValues,
     );
   }
   return (
