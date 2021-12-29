@@ -112,6 +112,16 @@ function StarWarsContextProvider({ children }) {
     });
   }
 
+  function removeFilter(event) {
+    const { name } = event.target;
+    setFilter((previousFilter) => ({
+      ...previousFilter,
+      filterByNumericValues: previousFilter
+        .filterByNumericValues
+        .filter((_numericValue, index) => index !== Number(name)),
+    }));
+  }
+
   useEffect(() => {
     fetchStarWarsAPI();
   }, [data, fetchStarWarsAPI, filter]);
@@ -124,6 +134,7 @@ function StarWarsContextProvider({ children }) {
     handleChangeFilterByName,
     handleClickFilterByNumericValues,
     optionsSelectFilter,
+    removeFilter,
   };
 
   return (
