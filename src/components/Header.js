@@ -57,29 +57,32 @@ function filterForm(tempFilterByNumericValues,
   );
 }
 
-function orderForm() {
+function orderForm(handleChangeOrderTable, clickChangeOrderTable) {
   return (
-    <form>
+    <form onSubmit={ clickChangeOrderTable }>
       <Select
         dataTestId={ DataSelect[2].dataTestId }
         name={ DataSelect[2].name }
         arrayOptions={ DataSelect[2].arrayOptions }
         title={ DataSelect[2].title }
+        onChange={ handleChangeOrderTable }
       />
       <RadioButton
-        dataTestId="radio"
-        name="classificacao"
-        value="ascendente"
+        dataTestId="column-sort-input-asc"
+        name="sort"
+        value="ASC"
         description="Ascendente"
+        onChange={ handleChangeOrderTable }
       />
       <RadioButton
-        dataTestId="radio"
-        name="classificacao"
-        value="descendente"
+        dataTestId="column-sort-input-desc"
+        name="sort"
+        value="DESC"
         description="Descendente"
+        onChange={ handleChangeOrderTable }
       />
       <Button
-        dataTestId="button"
+        dataTestId="column-sort-button"
         name="ordenar"
         value="ORDENAR"
       />
@@ -95,6 +98,8 @@ function Header() {
     handleChangeFilterByName,
     handleClickFilterByNumericValues,
     optionsSelectFilter,
+    handleChangeOrderTable,
+    clickChangeOrderTable,
   } = useContext(StarWarsContext);
   return (
     <section>
@@ -104,7 +109,7 @@ function Header() {
         handleClickFilterByNumericValues,
         handleChangeFilterByNumericValues,
         optionsSelectFilter) }
-      { orderForm() }
+      { orderForm(handleChangeOrderTable, clickChangeOrderTable) }
     </section>
   );
 }

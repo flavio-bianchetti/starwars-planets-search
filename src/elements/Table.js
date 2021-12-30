@@ -5,7 +5,7 @@ function getArrayFilteredByName(data, name) {
   return data.filter((planet) => planet.name.includes(name));
 }
 
-// dica de filtro fornecida por Bruno Bartolomeu, Isaac Batista e Lucas Pinheiro.
+// filtro elaborado após dica fornecida por Bruno Bartolomeu, Isaac Batista e Lucas Pinheiro.
 function getArrayFilteredByNumericValuesFilter(data, filterByNumericValues) {
   return data.filter((planet) => filterByNumericValues.every((values) => {
     const { column, comparison, value } = values;
@@ -60,7 +60,11 @@ function Table({ dataTestId, data, filter }) {
             key={ indexLine }
             dataTestId={ dataTestId }
           >
-            <td>{ line.name }</td>
+            <td
+              data-testid="planet-name"
+            >
+              { line.name }
+            </td>
             <td>{ line.rotation_period }</td>
             <td>{ line.orbital_period }</td>
             <td>{ line.diameter }</td>

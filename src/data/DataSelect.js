@@ -22,8 +22,8 @@ const DataSelect = [
     title: 'Operador',
   },
   {
-    dataTestId: 'select3',
-    name: 'ordenar',
+    dataTestId: 'column-sort',
+    name: 'column',
     arrayOptions: [
       { value: 'population', description: 'population' },
       { value: 'orbital_period', description: 'orbital_period' },

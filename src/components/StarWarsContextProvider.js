@@ -4,7 +4,7 @@ import StarWarsContext from '../context/StarWarsContext';
 import getStarWarsAPI from '../services/getStarWarsAPI';
 
 function StarWarsContextProvider({ children }) {
-  const [data, setdata] = useState([{
+  const [data, setData] = useState([{
     name: '',
     rotation_period: '',
     orbital_period: '',
@@ -44,13 +44,28 @@ function StarWarsContextProvider({ children }) {
       { value: 'surface_water', description: 'surface_water' },
     ],
   );
+  const [orderTable, setOrderTable] = useState(
+    {
+      order: {
+        column: 'population',
+        sort: 'ASC',
+      },
+    },
+  );
 
   function handleFetchSuccess(json) {
     const { results } = json;
+    // Solução baseada nos exemplos do site:
+    // https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Global_Objects/Array/sort
+    const minusOne = -1;
+    const NewResults = results.sort((a, b) => (a.name > b.name ? 1 : minusOne));
+    console.log(results);
     if (filter.filterByName.name !== '') {
-      setdata(results.filter((result) => result.name.includes(filter.filterByName.name)));
+      setData(
+        NewResults.filter((result) => result.name.includes(filter.filterByName.name)),
+      );
     } else {
-      setdata(results);
+      setData(NewResults);
     }
   }
 
@@ -122,6 +137,34 @@ function StarWarsContextProvider({ children }) {
     }));
   }
 
+  function handleChangeOrderTable(event) {
+    const { name, value } = event.target;
+    setOrderTable((previousOrderTable) => ({
+      order: {
+        ...previousOrderTable.order,
+        [name]: value,
+      },
+    }));
+  }
+
+  // Solução baseada nos exemplos do site:
+  // https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Global_Objects/Array/sort
+  function clickChangeOrderTable(event) {
+    event.preventDefault();
+    const { order } = orderTable;
+    const oldData = data.filter((item) => item);
+    setData(null);
+    setData(() => oldData.sort((a, b) => {
+      if (order.sort === 'ASC') {
+        return Number(a[order.column]) - Number(b[order.column]);
+      }
+      if (order.sort === 'DESC') {
+        return Number(b[order.column]) - Number(a[order.column]);
+      }
+      return 0;
+    }));
+  }
+
   useEffect(() => {
     fetchStarWarsAPI();
   }, [data, fetchStarWarsAPI, filter]);
@@ -135,6 +178,8 @@ function StarWarsContextProvider({ children }) {
     handleClickFilterByNumericValues,
     optionsSelectFilter,
     removeFilter,
+    handleChangeOrderTable,
+    clickChangeOrderTable,
   };
 
   return (
